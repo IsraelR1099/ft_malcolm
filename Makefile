@@ -1,0 +1,55 @@
+GREEN := $(shell tput -Txterm setaf 2)
+YELLOW := $(shell tput -Txterm setaf 3)
+RED := $(shell tput -Txterm setaf 1)
+BLUE := $(shell tput -Txterm setaf 4)
+CYAN := $(shell tput -Txterm setaf 6)
+RESET := $(shell tput sgr0)
+
+NAME := ft_malcolm
+CC := gcc
+WARNINGS := -Wall -Wextra -Werror -pedantic -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function
+DEBUG := -g #-fsanitize=address
+CFLAGS := $(WARNINGS) -I./include -MMD
+LDFLAGS := -L./Libft -lft
+LIBFT := ./Libft/libft.a
+
+SRC_DIR := src
+OBJ_DIR := obj
+SRC := $(SRC_DIR)/main.c \
+	   $(SRC_DIR)/utils.c
+OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+DEPS := $(OBJ:.o=.d)
+
+
+all: makelibs $(NAME)
+
+makelibs:
+	@echo "$(CYAN) 🛠  Compiling Libft... $(RESET)"
+	@$(MAKE) -C Libft
+	@echo "$(GREEN) ✅ Libft compiled successfully! $(RESET)"
+
+$(NAME): $(LIBFT) $(OBJ)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $@
+	@echo "$(GREEN) ✅ $(NAME) compiled successfully! $(RESET)"
+
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	@echo "$(YELLOW) 🛠  Compiling $<... $(RESET)"
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+-include $(DEPS)
+
+clean:
+	@echo "$(RED) 🧹 Cleaning object files... $(RESET)"
+	@$(MAKE) -C Libft clean
+	@rm -rf $(OBJ_DIR)
+
+fclean: clean
+	@echo "$(RED) 🧹 Cleaning $(NAME)... $(RESET)"
+	@$(MAKE) -C Libft fclean
+	@rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

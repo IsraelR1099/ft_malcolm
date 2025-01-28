@@ -6,14 +6,14 @@
 #    By: irifarac <irifarac@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/17 13:46:45 by irifarac          #+#    #+#              #
-#    Updated: 2025/01/27 13:28:20 by irifarac         ###   ########.fr        #
+#    Updated: 2025/01/28 21:44:01 by israel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CREATION_LIB = ar -crs
 
 WARNING_FLAGS := -Wall -Wextra -Werror -Wshadow -MMD -pedantic
-DEBUG_FLAGS := -g -Og
+DEBUG_FLAGS := -g
 INCLUDES := -I./src
 CFLAGS := $(WARNING_FLAGS) $(DEBUG_FLAGS) $(INCLUDES)
 NAME = libft.a
