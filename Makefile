@@ -8,15 +8,18 @@ RESET := $(shell tput sgr0)
 NAME := ft_malcolm
 CC := gcc
 WARNINGS := -Wall -Wextra -Werror -pedantic -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function
-DEBUG := -g #-fsanitize=address
-CFLAGS := $(WARNINGS) -I./include -MMD
+DEBUG := -g -ggdb #-fsanitize=address
+CFLAGS := $(WARNINGS) $(DEBUG) -lpcap -I./include -MMD
 LDFLAGS := -L./Libft -lft
 LIBFT := ./Libft/libft.a
 
 SRC_DIR := src
 OBJ_DIR := obj
 SRC := $(SRC_DIR)/main.c \
-	   $(SRC_DIR)/utils.c
+	   $(SRC_DIR)/utils.c \
+	   $(SRC_DIR)/ft_signals.c \
+	   $(SRC_DIR)/ft_set_dev.c \
+	   $(SRC_DIR)/ft_arp.c
 OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 DEPS := $(OBJ:.o=.d)
 
