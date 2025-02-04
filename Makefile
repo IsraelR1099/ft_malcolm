@@ -43,6 +43,15 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 -include $(DEPS)
 
+build:
+	docker build -t arp -f Dockerfile .
+
+run:
+	docker-compose -f docker-compose.yaml up
+
+down:
+	docker-compose -f docker-compose.yaml down
+
 clean:
 	@echo "$(RED) 🧹 Cleaning object files... $(RESET)"
 	@$(MAKE) -C Libft clean
