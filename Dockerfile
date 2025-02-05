@@ -24,10 +24,12 @@ RUN useradd -m -s /bin/bash arp-user && \
     echo 'arp-user:123' | chpasswd && \
     adduser arp-user sudo
 
-COPY Makefile script.sh /home/arp-user
-COPY src/ft_arp.c src/main.c src/ft_set_dev.c src/ft_signals.c /home/arp-user/src
-COPY include /home/arp-user/include
-COPY Libft /home/arp-user/Libft
+WORKDIR /home/ar-user
+
+COPY Makefile script.sh ./
+COPY src/ ./src/
+COPY include/ ./include/
+COPY Libft/ ./Libft/
 
 COPY [ "conf/vsftpd.conf", "/etc" ]
 COPY [ "conf/docker_entrypoint.sh", "/" ]
