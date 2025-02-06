@@ -8,11 +8,11 @@ void	ft_usage(void)
 
 void	ft_check_errors(int argc)
 {
-/*	if (getuid() != 0)
+	if (getuid() != 0)
 	{
 		fprintf(stderr, "You must be root to run this program\n");
 		exit (1);
-	}*/
+	}
 	if (argc < 2)
 	{
 		ft_usage();
@@ -26,6 +26,7 @@ void	ft_init(t_info *info, char **argv)
 	info->mac_src = argv[2];
 	info->ip_target = argv[3];
 	info->mac_target = argv[4];
+	info->dev = "eth0";
 }
 
 static void	ft_check_ip(t_info *info, struct ether_arp *arp_var)

@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     vsftpd \
     iproute2 \
     inetutils-ping \
+    iputils-arping \
     dsniff \
     sudo \
     vim \
