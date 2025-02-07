@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_arp.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/07 13:18:04 by irifarac          #+#    #+#             */
+/*   Updated: 2025/02/07 13:30:51 by irifarac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/ft_malcolm.h"
 
 static void	ft_recv(int sock, char *recv_buffer, size_t buf_size)
@@ -57,7 +69,7 @@ void	ft_set_arp_spoof(t_info info)
 		if (ntohs(recv_eth->ether_type) == ETH_P_ARP &&
 				ntohs(recv_arp->ea_hdr.ar_op) == ARPOP_REQUEST)
 		{
-			printf("Receivde ARP request from %s\n", inet_ntoa(*(struct in_addr *)&recv_arp->arp_spa));
+			printf("Received ARP request from %s\n", inet_ntoa(*(struct in_addr *)&recv_arp->arp_spa));
 		}
 		sleep(1);
 	}
