@@ -19,7 +19,8 @@ SRC := $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/utils.c \
 	   $(SRC_DIR)/ft_signals.c \
 	   $(SRC_DIR)/ft_set_dev.c \
-	   $(SRC_DIR)/ft_arp.c
+	   $(SRC_DIR)/ft_arp.c \
+	   $(SRC_DIR)/ft_send_arp.c
 OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 DEPS := $(OBJ:.o=.d)
 

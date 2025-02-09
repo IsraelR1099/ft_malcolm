@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:40 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/07 13:18:41 by irifarac         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:30:39 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ void	ft_set_signals(void);
 // ARP Spoofing
 void	ft_set_arp_spoof(t_info info);
 void	ft_set_device(t_info *info, struct sockaddr_ll *dev);
-
+void	ft_send_arp(t_info info, int sock, struct ether_arp *recv_arp, struct ether_header *recv_eth);
 #endif
