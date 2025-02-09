@@ -101,10 +101,3 @@ You should see something like:
 - This method enables MITM attacks, where the attacker can intercept and manipulate traffic.
 
 ⚠ **Disclaimer**: This tool is for educational and research purposes only. Unauthorized use is illegal.
-
----
-
-### 🔥 Next Steps
-
-Would you like to implement packet forwarding to act as a real MITM and capture traffic? 🚀
-
