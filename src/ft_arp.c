@@ -6,31 +6,12 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:04 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/09 18:31:38 by israel           ###   ########.fr       */
+/*   Updated: 2025/02/10 21:48:40 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_malcolm.h"
 #include "../Libft/src/libft.h"
-
-static void	ft_recv(int sock, char *recv_buffer, size_t buf_size)
-{
-	struct sockaddr_ll	recv_device;
-	socklen_t			recv_device_len;
-	int					len;
-
-	recv_device_len = sizeof(recv_device);
-	len = recvfrom(
-			sock, recv_buffer, buf_size, 0,
-			(struct sockaddr *)&recv_device,
-			&recv_device_len);
-	if (len < 0)
-	{
-		perror("recvfrom error: ");
-		return ;
-	}
-	printf("Received packet: %d bytes\n", len);
-}
 
 static void	ft_print_recv(struct ether_header *recv_eth)
 {

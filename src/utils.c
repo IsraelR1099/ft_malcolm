@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:27 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/10 13:32:59 by irifarac         ###   ########.fr       */
+/*   Updated: 2025/02/10 21:48:31 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,4 +117,23 @@ void	ft_check_syntax(t_info *info)
 	arp_var = (struct ether_arp *)(buffer + sizeof(struct ether_header));
 	ft_check_ip(info, arp_var);
 	ft_check_mac(info, src_mac, dst_mac);
+}
+
+void	ft_recv(int sock, char *recv_buffer, size_t buf_size)
+{
+	struct sockaddr_ll	recv_device;
+	socklen_t			recv_device_len;
+	int					len;
+
+	recv_device_len = sizeof(recv_device);
+	len = recvfrom(
+			sock, recv_buffer, buf_size, 0,
+			(struct sockaddr *)&recv_device,
+			&recv_device_len);
+	if (len < 0)
+	{
+		perror("recvfrom error: ");
+		return ;
+	}
+	printf("Received packet: %d bytes\n", len);
 }
