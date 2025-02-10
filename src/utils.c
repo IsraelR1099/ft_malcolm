@@ -6,40 +6,12 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:27 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/07 13:18:29 by irifarac         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:32:59 by irifarac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_malcolm.h"
-
-void	ft_usage(void)
-{
-	fprintf(stderr, "Usage: ./ft_malcolm [target_ip] [target_mac]");
-	fprintf(stderr, " [gateway_ip] [gateway_mac]\n");
-}
-
-void	ft_check_errors(int argc)
-{
-	if (getuid() != 0)
-	{
-		fprintf(stderr, "You must be root to run this program\n");
-		exit (1);
-	}
-	if (argc < 2)
-	{
-		ft_usage();
-		exit (0);
-	}
-}
-
-void	ft_init(t_info *info, char **argv)
-{
-	info->ip_src = argv[1];
-	info->mac_src = argv[2];
-	info->ip_target = argv[3];
-	info->mac_target = argv[4];
-	info->dev = "eth0";
-}
+#include "../Libft/src/libft.h"
 
 static void	ft_check_ip(t_info *info, struct ether_arp *arp_var)
 {
@@ -69,6 +41,70 @@ static void	ft_check_mac(t_info *info, unsigned char *src_mac, unsigned char *ds
 		fprintf(stderr, "Invalid target MAC address\n");
 		exit (1);
 	}
+}
+
+static void	ft_find_interface_by_ip(char *dev, t_info *info)
+{
+	struct ifaddrs		*ifaddr;
+	struct ifaddrs		*ifa;
+	struct sockaddr_in	*addr;
+	char				ip[INET_ADDRSTRLEN] = {0};
+	int					src_len;
+
+	if (getifaddrs(&ifaddr) == -1)
+	{
+		perror("getifaddrs");
+		exit (1);
+	}
+	src_len = ft_strlen(info->ip_src);
+	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
+	{
+		if (ifa->ifa_addr == NULL ||
+				ifa->ifa_addr->sa_family != AF_INET)
+			continue ;
+		addr = (struct sockaddr_in *)ifa->ifa_addr;
+		inet_ntop(AF_INET, &addr->sin_addr, ip, INET_ADDRSTRLEN);
+		if (ft_strncmp(ip, info->ip_src, src_len) == 0)
+		{
+			ft_memcpy(dev, ifa->ifa_name, ft_strlen(ifa->ifa_name));
+			freeifaddrs(ifaddr);
+			return ;
+		}
+	}
+	printf(TC_RED "No interface found\n" TC_NRM);
+	exit (1);
+}
+
+void	ft_usage(void)
+{
+	fprintf(stderr, "Usage: ./ft_malcolm [target_ip] [target_mac]");
+	fprintf(stderr, " [gateway_ip] [gateway_mac]\n");
+}
+
+void	ft_check_errors(int argc)
+{
+	if (getuid() != 0)
+	{
+		fprintf(stderr, "You must be root to run this program\n");
+		exit (1);
+	}
+	if (argc < 2)
+	{
+		ft_usage();
+		exit (0);
+	}
+}
+
+void	ft_init(t_info *info, char **argv)
+{
+	char	dev[IFNAMSIZ] = {0};
+
+	info->ip_src = argv[1];
+	info->mac_src = argv[2];
+	info->ip_target = argv[3];
+	info->mac_target = argv[4];
+	ft_find_interface_by_ip(dev, info);
+	ft_memcpy(info->dev, dev, ft_strlen(dev));
 }
 
 void	ft_check_syntax(t_info *info)

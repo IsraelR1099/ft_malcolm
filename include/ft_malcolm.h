@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:40 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/08 18:30:39 by israel           ###   ########.fr       */
+/*   Updated: 2025/02/10 12:53:47 by irifarac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 # include <netinet/if_ether.h>
 
 # include <sys/socket.h>
+# include <sys/types.h>
+# include <ifaddrs.h>
 
 # include <pcap.h>
 
@@ -47,7 +49,7 @@ extern volatile sig_atomic_t  stop;
 
 typedef struct	s_info
 {
-  char		*dev;
+  char		dev[IFNAMSIZ];
   char		*ip_src;
   char		*ip_target;
   char		*mac_src;
