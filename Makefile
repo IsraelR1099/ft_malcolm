@@ -44,6 +44,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 -include $(DEPS)
 
+bonus: CFLAGS += -D BONUS
+bonus: re
+
 build:
 	docker build -t arp -f Dockerfile .
 
