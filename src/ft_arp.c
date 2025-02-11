@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:04 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/10 21:48:40 by israel           ###   ########.fr       */
+/*   Updated: 2025/02/11 20:17:00 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	ft_set_arp_spoof(t_info info)
 	if (sock < 0)
 	{
 		perror("socket");
-		exit (1);
+		return ;
 	}
 	ft_set_device(&info, &device);
 	printf("ARP Spoofing is started\n");
@@ -54,18 +54,28 @@ void	ft_set_arp_spoof(t_info info)
 		ft_recv(sock, recv_buffer, sizeof(recv_buffer));
 		recv_eth = (struct ether_header *)recv_buffer;
 		recv_arp = (struct ether_arp *)(recv_buffer + sizeof(struct ether_header));
-		ft_print_recv(recv_eth);
+		//ft_print_recv(recv_eth);
 		if (ntohs(recv_eth->ether_type) == ETH_P_ARP &&
 				ntohs(recv_arp->ea_hdr.ar_op) == ARPOP_REQUEST)
 		{
-			printf(TC_GRN"ARP request received\n" TC_NRM);
+			printf(TC_GRN"An ARP request has been broadcast.\n" TC_NRM);
 			printf("received from %s\n", inet_ntoa(*(struct in_addr *)&recv_arp->arp_spa));
-			printf("ip target is %s\n", info.ip_target);
 			ft_memcpy(spa, inet_ntoa(*(struct in_addr *)&recv_arp->arp_spa), 16);
 			if (ft_strncmp(spa, info.ip_target, ft_strlen(info.ip_target)) == 0)
 			{
-				printf("ARP request from target\n");
-				ft_send_arp(info, sock, recv_arp, recv_eth);
+				printf(
+						TC_YEL "\tmac address of request: %s\n" TC_NRM,
+						info.mac_target);
+				printf(
+						TC_YEL "\tIP address of request: %s\n"TC_NRM,
+						info.ip_target);
+				if (ft_send_arp(info, sock, recv_arp, recv_eth) < 0)
+				{
+					printf(TC_RED "ARP Spoofing is stopped\n" TC_NRM);
+					break ;
+				}
+				printf(TC_RED "Exiting program...\n" TC_NRM);
+				break ;
 			}
 			else
 				printf("ARP request from unknown\n");

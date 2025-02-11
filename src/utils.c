@@ -6,44 +6,46 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:27 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/10 21:48:31 by israel           ###   ########.fr       */
+/*   Updated: 2025/02/11 20:31:35 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_malcolm.h"
 #include "../Libft/src/libft.h"
 
-static void	ft_check_ip(t_info *info, struct ether_arp *arp_var)
+static int	ft_check_ip(t_info *info, struct ether_arp *arp_var)
 {
 	if (inet_pton(AF_INET, info->ip_src, &arp_var->arp_spa) != 1)
 	{
 		fprintf(stderr, "Invalid source IP address\n");
-		exit (1);
+		return (-1);
 	}
 	if (inet_pton(AF_INET, info->ip_target, &arp_var->arp_tpa) != 1)
 	{
 		fprintf(stderr, "Invalid target IP address\n");
-		exit (1);
+		return (-1);
 	}
+	return (0);
 }
 
-static void	ft_check_mac(t_info *info, unsigned char *src_mac, unsigned char *dst_mac)
+static int	ft_check_mac(t_info *info, unsigned char *src_mac, unsigned char *dst_mac)
 {
 	if (sscanf(info->mac_src, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx",
 		&src_mac[0], &src_mac[1], &src_mac[2], &src_mac[3], &src_mac[4], &src_mac[5]) != MAC_ADDR_LEN)
 	{
 		fprintf(stderr, "Invalid source MAC address\n");
-		exit (1);
+		return (-1);
 	}
 	if (sscanf(info->mac_target, "%hhx:%hhx:%hhx:%hhx:%hhx:%hhx",
 		&dst_mac[0], &dst_mac[1], &dst_mac[2], &dst_mac[3], &dst_mac[4], &dst_mac[5]) != MAC_ADDR_LEN)
 	{
 		fprintf(stderr, "Invalid target MAC address\n");
-		exit (1);
+		return (-1);
 	}
+	return (0);
 }
 
-static void	ft_find_interface_by_ip(char *dev, t_info *info)
+static int	ft_find_interface_by_ip(char *dev, t_info *info)
 {
 	struct ifaddrs		*ifaddr;
 	struct ifaddrs		*ifa;
@@ -54,7 +56,7 @@ static void	ft_find_interface_by_ip(char *dev, t_info *info)
 	if (getifaddrs(&ifaddr) == -1)
 	{
 		perror("getifaddrs");
-		exit (1);
+		return (-1);
 	}
 	src_len = ft_strlen(info->ip_src);
 	for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
@@ -66,13 +68,15 @@ static void	ft_find_interface_by_ip(char *dev, t_info *info)
 		inet_ntop(AF_INET, &addr->sin_addr, ip, INET_ADDRSTRLEN);
 		if (ft_strncmp(ip, info->ip_src, src_len) == 0)
 		{
+			printf(TC_GRN "Found available interface: %s\n" TC_NRM, ifa->ifa_name);
 			ft_memcpy(dev, ifa->ifa_name, ft_strlen(ifa->ifa_name));
 			freeifaddrs(ifaddr);
-			return ;
+			return (0);
 		}
 	}
 	printf(TC_RED "No interface found\n" TC_NRM);
-	exit (1);
+	freeifaddrs(ifaddr);
+	return (-1);
 }
 
 void	ft_usage(void)
@@ -81,21 +85,22 @@ void	ft_usage(void)
 	fprintf(stderr, " [gateway_ip] [gateway_mac]\n");
 }
 
-void	ft_check_errors(int argc)
+int	ft_check_errors(int argc)
 {
 	if (getuid() != 0)
 	{
 		fprintf(stderr, "You must be root to run this program\n");
-		exit (1);
+		return (-1);
 	}
 	if (argc < 2)
 	{
 		ft_usage();
-		exit (0);
+		return (-1);
 	}
+	return (0);
 }
 
-void	ft_init(t_info *info, char **argv)
+int	ft_init(t_info *info, char **argv)
 {
 	char	dev[IFNAMSIZ] = {0};
 
@@ -103,11 +108,13 @@ void	ft_init(t_info *info, char **argv)
 	info->mac_src = argv[2];
 	info->ip_target = argv[3];
 	info->mac_target = argv[4];
-	ft_find_interface_by_ip(dev, info);
+	if (ft_find_interface_by_ip(dev, info) < 0)
+		return (-1);
 	ft_memcpy(info->dev, dev, ft_strlen(dev));
+	return (0);
 }
 
-void	ft_check_syntax(t_info *info)
+int	ft_check_syntax(t_info *info)
 {
 	struct ether_arp	*arp_var;
 	char				buffer[42] = {0};
@@ -115,8 +122,11 @@ void	ft_check_syntax(t_info *info)
 	unsigned char		dst_mac[MAC_ADDR_LEN] = {0};
 
 	arp_var = (struct ether_arp *)(buffer + sizeof(struct ether_header));
-	ft_check_ip(info, arp_var);
-	ft_check_mac(info, src_mac, dst_mac);
+	if (ft_check_ip(info, arp_var) < 0)
+		return (-1);
+	if (ft_check_mac(info, src_mac, dst_mac) < 0)
+		return (-1);
+	return (0);
 }
 
 void	ft_recv(int sock, char *recv_buffer, size_t buf_size)

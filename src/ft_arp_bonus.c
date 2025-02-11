@@ -18,17 +18,21 @@ void	ft_arp_bonus(t_info info)
 	}
 	ft_set_device(&info, &device);
 	printf("ARP Spoofing Start\n");
-	ft_recv(sock, recv_buff, sizeof(recv_buff));
-	recv_eth = (struct ether_header *)recv_buff;
-	recv_arp = (struct ether_arp *)(recv_buff + sizeof(struct ether_header));
-	if (ntohs(recv_eth->ether_type) == ETH_P_ARP &&
-			ntohs(recv_arp->ea_hdr.ar_op) == ARPOP_REQUEST)
+	while (!stop)
 	{
-		printf(TC_GRN"ARP Request received\n"TC_NRM);
-		ft_memcpy(spa, inet_ntoa(*(struct in_addr *)&recv_arp->arp_spa), 16);
-		if (ft_strncmp(spa, info.ip_target, ft_strlen(info.ip_target)) == 0)
+		ft_recv(sock, recv_buff, sizeof(recv_buff));
+		recv_eth = (struct ether_header *)recv_buff;
+		recv_arp = (struct ether_arp *)(recv_buff + sizeof(struct ether_header));
+		if (ntohs(recv_eth->ether_type) == ETH_P_ARP &&
+				ntohs(recv_arp->ea_hdr.ar_op) == ARPOP_REQUEST)
 		{
-			printf(TC_GRN"ARP Reply sent\n"TC_NRM);
+			printf(TC_GRN"ARP Request received\n"TC_NRM);
+			ft_memcpy(spa, inet_ntoa(*(struct in_addr *)&recv_arp->arp_spa), 16);
+			if (ft_strncmp(spa, info.ip_target, ft_strlen(info.ip_target)) == 0)
+			{
+				printf(TC_GRN"ARP Reply sent\n"TC_NRM);
+			}
 		}
+		sleep(1);
 	}
 }

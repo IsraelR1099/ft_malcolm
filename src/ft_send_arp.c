@@ -6,14 +6,14 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:35:35 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/10 13:35:39 by irifarac         ###   ########.fr       */
+/*   Updated: 2025/02/11 20:19:32 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_malcolm.h"
 #include "../Libft/src/libft.h"
 
-static void	ft_set_hdr(struct ether_header *eth, struct ether_arp *arp,
+static int	ft_set_hdr(struct ether_header *eth, struct ether_arp *arp,
 		u_char *src_mac, u_char *target_mac, char *ip_spoof, char *ip_target)
 {
 
@@ -31,18 +31,19 @@ static void	ft_set_hdr(struct ether_header *eth, struct ether_arp *arp,
 	if (inet_pton(AF_INET, ip_spoof, arp->arp_spa) != 1)
 	{
 		perror("inet_pton error");
-		exit(1);
+		return (-1);
 	}
 	ft_memcpy(arp->arp_tha, target_mac, MAC_ADDR_LEN);
 	if (inet_pton(AF_INET, ip_target, arp->arp_tpa) != 1)
 	{
 		perror("inet_pton error");
-		exit(1);
+		return (-1);
 	}
+	return (0);
 }
 
 
-void	ft_send_arp(t_info info, int sock, struct ether_arp *recv_arp, struct ether_header *recv_eth)
+int	ft_send_arp(t_info info, int sock, struct ether_arp *recv_arp, struct ether_header *recv_eth)
 {
 	char				buffer[42] = {0};
 	u_char				source_mac[MAC_ADDR_LEN] = {0};
@@ -60,24 +61,29 @@ void	ft_send_arp(t_info info, int sock, struct ether_arp *recv_arp, struct ether
 				&source_mac[3], &source_mac[4], &source_mac[5]) != MAC_ADDR_LEN)
 	{
 		perror("MAC address format error");
-		exit(1);
+		return (-1);
 	}
 	if (inet_ntop(AF_INET, recv_arp->arp_tpa, ip_spoof, sizeof(ip_spoof)) == NULL)
 	{
 		perror("inet_ntop error");
-		exit(1);
+		return (-1);
 	}
 	if (inet_ntop(AF_INET, recv_arp->arp_spa, ip_target, sizeof(ip_target)) == NULL)
 	{
 		perror("inet_ntop error");
-		exit(1);
+		return (-1);
 	}
-	ft_set_hdr(eth, arp, source_mac, recv_eth->ether_shost, ip_spoof,ip_target);
+	if (ft_set_hdr(
+			eth, arp, source_mac,
+			recv_eth->ether_shost,
+			ip_spoof,ip_target) < 0)
+		return (-1);
 	if (sendto(sock, buffer, sizeof(buffer), 0,
 				(struct sockaddr *)&device, sizeof(device)) < 0)
 	{
 		perror("sendto error");
-		exit(1);
+		return (-1);
 	}
 	printf("Sent ARP reply: %s at %s\n", ip_spoof, info.mac_src);
+	return (0);
 }

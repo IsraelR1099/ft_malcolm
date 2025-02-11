@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 10:14:11 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/10 21:26:04 by israel           ###   ########.fr       */
+/*   Updated: 2025/02/11 20:28:03 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,16 @@ int	main(int argc, char **argv)
 	t_info	info;
 
 	ft_memset(&info, 0, sizeof(t_info));
-	ft_check_errors(argc);
-	ft_init(&info, argv);
-	ft_check_syntax(&info);
+	if (ft_check_errors(argc) < 0)
+		return (-1);
+	if (ft_init(&info, argv) < 0)
+		return (-1);
+	if (ft_check_syntax(&info) < 0)
+		return (-1);
 	ft_set_signals();
 #ifdef BONUS
 		ft_set_arp_spoof_bonus(info);
-	else
+#else
 		ft_set_arp_spoof(info);
 #endif
 	return (0);

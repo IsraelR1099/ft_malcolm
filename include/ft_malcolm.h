@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:40 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/10 21:49:04 by israel           ###   ########.fr       */
+/*   Updated: 2025/02/11 20:27:53 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ typedef struct	s_info
 
 
 // Utils.c
-void  ft_check_errors(int argc);
+int   ft_check_errors(int argc);
 void  ft_usage(void);
-void  ft_init(t_info *info, char **argv);
-void  ft_check_syntax(t_info *info);
+int   ft_init(t_info *info, char **argv);
+int   ft_check_syntax(t_info *info);
 
 // Signals
 void	ft_set_signals(void);
@@ -72,6 +72,6 @@ void	ft_set_signals(void);
 // ARP Spoofing
 void	ft_set_arp_spoof(t_info info);
 void	ft_set_device(t_info *info, struct sockaddr_ll *dev);
-void	ft_send_arp(t_info info, int sock, struct ether_arp *recv_arp, struct ether_header *recv_eth);
+int 	ft_send_arp(t_info info, int sock, struct ether_arp *recv_arp, struct ether_header *recv_eth);
 void	ft_recv(int sock, char *recv_buffer, size_t buf_size);
 #endif
