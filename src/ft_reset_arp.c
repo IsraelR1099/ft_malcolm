@@ -1,6 +1,35 @@
 #include "../include/ft_malcolm.h"
 #include "../Libft/src/libft.h"
 
+static void	ft_set_hdrs(struct ether_header *eth, struct ether_arp *arp, u_char *src_mac, char *ip_target)
+{
+	char	gateway_ip[16] = {0};
+
+	ft_get_gateway(gateway_ip);
+	ft_memset(eth->ether_dhost, 0xff, ETH_ALEN);
+	ft_memcpy(eth->ether_shost, src_mac, ETH_ALEN);
+	eth->ether_type = htons(ETH_P_ARP);
+
+	arp->arp_hrd = htons(ARPHRD_ETHER);
+	arp->arp_pro = htons(ETH_P_IP);
+	arp->arp_hln = ETH_ALEN;
+	arp->arp_pln = 4;
+	arp->arp_op = htons(ARPOP_REPLY);
+
+	ft_memcpy(arp->arp_sha, src_mac, ETH_ALEN);
+	if (inet_pton(AF_INET, gateway_ip, arp->arp_spa) <= 0)
+	{
+		perror("inet_pton()");
+		exit (1);
+	}
+	ft_memset(arp->arp_tha, 0, ETH_ALEN);
+	if (inet_pton(AF_INET, ip_target, arp->arp_tpa) <= 0)
+	{
+		perror("inet_pton()");
+		exit (1);
+	}
+}
+
 void	ft_reset_arp(t_info *info)
 {
 	char				buff[42] = {0};

@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:40 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/11 20:27:53 by israel           ###   ########.fr       */
+/*   Updated: 2025/02/12 13:18:38 by irifarac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,8 @@ void	ft_set_arp_spoof(t_info info);
 void	ft_set_device(t_info *info, struct sockaddr_ll *dev);
 int 	ft_send_arp(t_info info, int sock, struct ether_arp *recv_arp, struct ether_header *recv_eth);
 void	ft_recv(int sock, char *recv_buffer, size_t buf_size);
+
+// Bonus
+
+void	get_gateway(char *gateway_ip);
 #endif
