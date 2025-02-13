@@ -6,7 +6,7 @@
 #    By: irifarac <irifarac@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/17 13:46:45 by irifarac          #+#    #+#              #
-#    Updated: 2025/01/29 20:45:23 by israel           ###   ########.fr        #
+#    Updated: 2025/02/13 23:01:35 by israel           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ SRC =	$(addprefix $(SRC_DIR)/, \
 	ft_strdup.c \
 	ft_strlcat.c \
 	ft_strlcpy.c \
+	ft_strncpy.c \
 	ft_strlen.c \
 	ft_strncmp.c \
 	ft_strnstr.c \
