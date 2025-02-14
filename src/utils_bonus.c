@@ -6,13 +6,14 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 13:10:17 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/12 13:17:45 by irifarac         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:51:09 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_malcolm.h"
+#include "../Libft/src/libft.h"
 
-void	get_gateway(char *gateway_ip)
+void	ft_get_gateway(char *gateway_ip)
 {
 	FILE			*fp;
 	char			buf[256] = {0};
@@ -35,7 +36,7 @@ void	get_gateway(char *gateway_ip)
 			if (dest == 0)
 			{
 				gw_addr.s_addr = gw;
-				strncpy(gateway_ip, inet_ntoa(gw_addr), 16);
+				ft_strncpy(gateway_ip, inet_ntoa(gw_addr), 16);
 				fclose(fp);
 				return ;
 			}

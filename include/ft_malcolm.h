@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:40 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/12 13:18:38 by irifarac         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:05:40 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,7 @@ void	ft_recv(int sock, char *recv_buffer, size_t buf_size);
 
 // Bonus
 
-void	get_gateway(char *gateway_ip);
+void	ft_get_gateway(char *gateway_ip);
+void	ft_reset_arp(t_info *info);
+void	ft_set_arp_spoof_bonus(t_info info);
 #endif

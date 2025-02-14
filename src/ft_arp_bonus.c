@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:19:01 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/12 11:19:03 by irifarac         ###   ########.fr       */
+/*   Updated: 2025/02/14 18:04:03 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	ft_print_recv(struct ether_header *recv_eth, struct ether_arp *recv_
 	ft_arp_section(recv_eth, recv_arp);
 }
 
-void	ft_arp_bonus(t_info info)
+void	ft_set_arp_spoof_bonus(t_info info)
 {
 	struct sockaddr_ll	device;
 	struct ether_header	*recv_eth;

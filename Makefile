@@ -20,9 +20,14 @@ SRC := $(SRC_DIR)/main.c \
 	   $(SRC_DIR)/ft_signals.c \
 	   $(SRC_DIR)/ft_set_dev.c \
 	   $(SRC_DIR)/ft_arp.c \
-	   $(SRC_DIR)/ft_send_arp.c \
-	   $(SRC_DIR)/ft_reset_arp.c \
-	   $(SRC_DIR)/ft_arp_bonus.c
+	   $(SRC_DIR)/ft_send_arp.c
+
+ifeq ($(MAKECMDGOALS), bonus)
+	CFLAGS += -D BONUS
+	SRC += $(SRC_DIR)/ft_arp_bonus.c \
+		   $(SRC_DIR)/utils_bonus.c \
+		   $(SRC_DIR)/ft_reset_arp.c
+endif
 OBJ := $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 DEPS := $(OBJ:.o=.d)
 
@@ -46,8 +51,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 -include $(DEPS)
 
-bonus: CFLAGS += -D BONUS
-bonus: re
+bonus: fclean all
 
 build:
 	docker build -t arp -f Dockerfile .
@@ -70,4 +74,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus makelibs build run down
