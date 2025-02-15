@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 13:18:27 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/12 13:09:30 by irifarac         ###   ########.fr       */
+/*   Updated: 2025/02/15 17:56:45 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	ft_check_errors(int argc)
 		fprintf(stderr, "You must be root to run this program\n");
 		return (-1);
 	}
-	if (argc < 2)
+	if (argc < 2 || argc > 5)
 	{
 		ft_usage();
 		return (-1);
@@ -104,6 +104,14 @@ int	ft_init(t_info *info, char **argv)
 {
 	char	dev[IFNAMSIZ] = {0};
 
+	if (argv[1] == NULL ||
+			argv[2] == NULL ||
+			argv[3] == NULL ||
+			argv[4] == NULL)
+	{
+		ft_usage();
+		return (-1);
+	}
 	info->ip_src = argv[1];
 	info->mac_src = argv[2];
 	info->ip_target = argv[3];

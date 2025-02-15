@@ -6,7 +6,7 @@
 /*   By: irifarac <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 10:14:11 by irifarac          #+#    #+#             */
-/*   Updated: 2025/02/11 20:28:03 by israel           ###   ########.fr       */
+/*   Updated: 2025/02/15 14:38:03 by israel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	main(int argc, char **argv)
 		return (-1);
 	ft_set_signals();
 #ifdef BONUS
+		ft_get_gateway(info.gateway_ip);
+		ft_get_gateway_mac(info.gateway_ip, info.gateway_mac);
 		ft_set_arp_spoof_bonus(info);
 #else
 		ft_set_arp_spoof(info);
