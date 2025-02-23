@@ -28,19 +28,19 @@ This generates the `ft_malcolm` executable.
 ## Usage
 
 ```sh
-sudo ./ft_malcolm <gateway_ip> <attacker_mac> <victim_ip> <victim_mac>
+sudo ./ft_malcolm <ip_attacker> <attacker_mac> <victim_ip> <victim_mac>
 ```
 
 ### Example:
 
 ```sh
-sudo ./ft_malcolm 172.168.238.1 02:42:ac:a8:ee:04 172.168.238.3 02:42:ac:a8:ee:03
+sudo ./ft_malcolm 172.168.238.3 02:42:ac:a8:ee:04 172.168.238.4 02:42:ac:a8:ee:03
 ```
 
 This command:
 
 - Spoofs the **gateway** (`172.168.238.1`) by responding with the **attacker's MAC** (`02:42:ac:a8:ee:04`).
-- Targets the **victim** (`172.168.238.3`) with its **real MAC** (`02:42:ac:a8:ee:03`).
+- Targets the **victim** (`172.168.238.4`) with its **real MAC** (`02:42:ac:a8:ee:03`).
 
 ## Testing ft\_malcolm
 
@@ -49,7 +49,7 @@ To verify that the attack is working, follow these steps:
 ### 1️⃣ Run `ft_malcolm` on the Attacker:
 
 ```sh
-sudo ./ft_malcolm 172.168.238.1 02:42:ac:a8:ee:04 172.168.238.3 02:42:ac:a8:ee:03
+sudo ./ft_malcolm 172.168.238.3 02:42:ac:a8:ee:04 172.168.238.4 02:42:ac:a8:ee:03
 ```
 
 ### 2️⃣ Send ARP Requests from the Victim:
